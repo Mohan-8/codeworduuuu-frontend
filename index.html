@@ -56,6 +56,8 @@
         </div>
         <div class="bg-success p-2 text-dark bg-opacity-25">
           <p id="result"></p>
+          <button onclick="copyToClipboard()" class="btn btn-success mb-1 text-light">Copy Result</button>
+        </div>
         </div>
       </div>
     </div>
@@ -109,6 +111,16 @@
             error.message
           );
         }
+      }
+      function copyToClipboard() {
+        const resultText = document.getElementById("result").textContent;
+        navigator.clipboard.writeText(resultText)
+          .then(() => {
+            alert("Result copied to clipboard!");
+          })
+          .catch(err => {
+            console.error("Failed to copy result: ", err);
+          });
       }
     </script>
   </body>
