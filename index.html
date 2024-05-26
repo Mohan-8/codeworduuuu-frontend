@@ -88,30 +88,31 @@
         await handleAction("/decrypt", text);
       }
 
-      async function handleAction(action, text) {
-        try {
-          const response = await fetch(
-            "https://codeworduuu.vercel.app/api" + action,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ text }),
-            }
-          );
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          const result = await response.text();
-          document.getElementById("result").textContent = result;
-        } catch (error) {
-          console.error(
-            "There was a problem with the fetch operation:",
-            error.message
-          );
-        }
+    async function handleAction(action, text) {
+  try {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const response = await fetch(
+      "https://codeworduuu.vercel.app/api" + action,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "CSRF-Token": csrfToken
+        },
+        body: JSON.stringify({ text }),
       }
+    );
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const result = await response.text();
+    document.getElementById("result").textContent = result;
+  } catch (error) {
+    console.error("There was a problem with the fetch operation:", error.message);
+    document.getElementById("result").textContent = "Error: " + error.message;
+  }
+}
+
       function copyToClipboard() {
         const resultText = document.getElementById("result").textContent;
         navigator.clipboard.writeText(resultText)
