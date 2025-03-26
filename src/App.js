@@ -65,6 +65,7 @@ const CodewordApp = () => {
           headers: algorithm === "steganography" ? {} : headers,
           body:
             algorithm === "steganography" ? payload : JSON.stringify(payload),
+          mode: "no-cors",
         }
       );
 
