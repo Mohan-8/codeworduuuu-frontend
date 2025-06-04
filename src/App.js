@@ -11,6 +11,7 @@ const CodewordApp = () => {
   const [imageFile, setImageFile] = useState(null);
   const [result, setResult] = useState("");
   const [downloadUrl, setDownloadUrl] = useState("");
+
   const handleEncrypt = async () => {
     await handleAction("/encrypt", encryptText);
   };
@@ -76,7 +77,6 @@ const CodewordApp = () => {
       const resultData = await response.json();
       setResult(resultData.encrypted || resultData.decrypted || "No output");
 
-      // If the result is an image URL (for steganography), set it for download
       if (action === "/encrypt" && resultData.imageUrl) {
         setDownloadUrl(resultData.imageUrl);
       } else if (action === "/decrypt" && resultData.imageUrl) {
@@ -94,14 +94,24 @@ const CodewordApp = () => {
       .then(() => alert("Result copied to clipboard!"))
       .catch((err) => console.error("Failed to copy result:", err));
   };
+
   const downloadImage = () => {
     if (downloadUrl) {
       const link = document.createElement("a");
       link.href = downloadUrl;
-      link.download = "encrypted_image.png"; // Change the file name as needed
+      link.download = "encrypted_image.png";
       link.click();
     }
   };
+
+  const handleClearInputs = () => {
+    setEncryptText("");
+    setDecryptText("");
+    setResult("");
+    setDownloadUrl("");
+    setImageFile(null);
+  };
+
   return (
     <div className="container text-center mt-3">
       <h1 className="mb-4">🔐 Codeword Emoji Encryption</h1>
@@ -244,6 +254,7 @@ const CodewordApp = () => {
                 />
               </>
             )}
+
             {algorithm === "steganography" && (
               <>
                 <label className="mt-3">Upload Image for Decryption:</label>
@@ -272,7 +283,6 @@ const CodewordApp = () => {
         <h4>🔎 Result:</h4>
         <p className="fs-5">{result}</p>
 
-        {/* Download Image Button */}
         {downloadUrl && (
           <button
             className="btn btn-primary text-light mt-3"
@@ -283,10 +293,17 @@ const CodewordApp = () => {
         )}
 
         <button
-          className="btn btn-success text-light mt-3"
+          className="btn btn-success text-light mt-3 me-2"
           onClick={copyToClipboard}
         >
           📋 Copy Result
+        </button>
+
+        <button
+          className="btn btn-danger text-light mt-3"
+          onClick={handleClearInputs}
+        >
+          🧹 Clear Inputs
         </button>
       </div>
     </div>
@@ -294,4 +311,3 @@ const CodewordApp = () => {
 };
 
 export default CodewordApp;
-// ###
