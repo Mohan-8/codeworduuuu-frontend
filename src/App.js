@@ -102,6 +102,13 @@ const CodewordApp = () => {
       link.click();
     }
   };
+  const handleClearInputs = () => {
+    setEncryptText("");
+    setDecryptText("");
+    setResult("");
+    setDownloadUrl("");
+    setImageFile(null);
+  };
   return (
     <div className="container text-center mt-3">
       <h1 className="mb-4">🔐 Codeword Emoji Encryption</h1>
@@ -287,6 +294,12 @@ const CodewordApp = () => {
           onClick={copyToClipboard}
         >
           📋 Copy Result
+        </button>
+        <button
+          className="btn btn-danger text-light mt-3"
+          onClick={handleClearInputs}
+        >
+          🧹 Clear Inputs
         </button>
       </div>
     </div>
